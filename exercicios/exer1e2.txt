@@ -1,0 +1,64 @@
+EXERCÍCIO 1
+Com apenas um cursor traga os clientes e a soma dos seus pedidos (lembre de usar um apelido para a soma)
+
+declare
+cursor c_1 is
+select cliente.nome, sum(pedido.vlr_pedido) soma_pedido
+from   cliente, pedido
+where  cliente.cod_cli = pedido.cod_cli
+group by cliente.nome;
+r_1 c_1%rowtype;
+begin
+open c_1;
+loop
+fetch c_1 into r_1;
+exit when c_1%notfound;
+dbms_output.put_line('Nome '||r_1.nome||' Valor '||r_1.soma_pedido);
+end loop;
+close c_1;
+end;
+
+
+EXERCÍCIO 2
+
+Altere a questão 1 e traga a soma dos pedidos por cliente e por data. Traga apenas os clientes que a soma for maior do que 1000.
+
+--exemplo com if
+
+
+declare
+
+cursor c_1 is
+
+select cliente.nome, to_char(pedido.dt_pedido,'mm/rrrr') datap , sum(pedido.vlr_pedido) soma_pedido
+
+from   cliente, pedido
+
+where  cliente.cod_cli = pedido.cod_cli
+
+group by cliente.nome, to_char(pedido.dt_pedido,'mm/rrrr');
+
+
+r_1 c_1%rowtype;
+
+begin
+
+open c_1;
+
+loop
+
+fetch c_1 into r_1;
+
+exit when c_1%notfound;
+
+if r_1.soma_pedido > 1000 then
+
+dbms_output.put_line('Nome '||r_1.nome||' data '||r_1.datap||' Valor '||r_1.soma_pedido);
+
+end if;
+
+end loop;
+
+close c_1;
+
+end;

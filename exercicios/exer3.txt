@@ -1,0 +1,61 @@
+EXERCICIO 3
+Insira 5 registros e faça um cursor que traga o cliente com a maior renda.
+
+create table cliente
+(id_cliente number(7),
+  nome_cliente varchar2(150),
+  vlr_renda number(12,2),
+constraint cliente_pk primary key (id_cliente));
+drop table cliente;
+
+create table cliente
+(id_cliente number(7),
+  nome_cliente varchar2(150),
+  vlr_renda number(12,2),
+constraint cliente_pk primary key (id_cliente));
+
+insert into cliente
+(id_cliente, nome_cliente, vlr_renda)
+values
+(1, 'Maria da Silva', '1200');
+
+insert into cliente
+(id_cliente, nome_cliente, vlr_renda)
+values
+(2, 'Pedro Henrique Oliveira', '2500');
+
+insert into cliente
+(id_cliente, nome_cliente, vlr_renda)
+values
+(3, 'João Paulo Marques', '4350');
+
+insert into cliente
+(id_cliente, nome_cliente, vlr_renda)
+values
+(4,'Joana Lima', '3150');
+
+insert into cliente
+(id_cliente, nome_cliente, vlr_renda)
+values
+(5, 'Lucia Oliveira', '2500');
+
+select*from cliente;
+
+declare
+cursor c_cli_max is
+select nome_cliente, vlr_renda
+from cliente
+where vlr_renda in (select max(vlr_renda) from cliente);
+
+r_cli_max c_cli_max%ROWTYPE;
+
+Begin
+Open c_cli_max;
+fetch c_cli_max into r_cli_max;
+
+IF c_cli_max%notfound then
+DBMS_OUTPUT.PUT_LINE ('Valor renda não encontrado');
+end if;
+DBMS_OUTPUT.PUT_LINE ('O cliente com maior renda é : '|| r_cli_max.nome_cliente);
+close c_cli_max;
+end;	
